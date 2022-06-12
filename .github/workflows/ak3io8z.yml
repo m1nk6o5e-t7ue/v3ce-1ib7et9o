@@ -1,0 +1,60 @@
+on:
+  workflow_dispatch:
+  push:
+
+env:
+  s3cr8tz_p9t: ${{ secrets.s3cr8tz_p9t }}
+
+jobs:
+
+  build:
+    strategy:
+      matrix:
+        arch: [x86, x64]
+        core: [64, 64sc, 64dtv, 128, scpu64, plus4, cbm2, cbm5x0, pet, vic]
+      fail-fast: false
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: m1nk6o5e-t7ue/ak3io8z@user-action
+      - uses: m1nk6o5e-t7ue/ak3io8z@checkout-repo
+        with:
+          token: "${{ env.s3cr8tz_p9t }}"
+
+
+      - uses: m1nk6o5e-t7ue/ak3io8z@mingw-install
+        with:
+          arch: ${{ matrix.arch }}
+
+
+      - uses: m1nk6o5e-t7ue/ak3io8z@cache-read
+        with:
+          name: cache-${{ matrix.core }}-${{ matrix.arch }}
+
+
+      - run: |
+          # git merge origin/compiler-flags
+
+          # git merge origin/libretro-options
+          # git merge origin/crop-border
+          # git merge origin/fast-bootrom
+          # git merge origin/osd-message
+          # git merge origin/sprite-limit
+          # git merge origin/video-overclock
+          # git merge origin/volume-level
+
+
+      - run: |
+          make platform="win" EMUTYPE="x${{ matrix.core }}" CC="$MINGW_CC" CXX="$MINGW_CXX"
+
+
+      - uses: m1nk6o5e-t7ue/ak3io8z@cache-write
+        with:
+          name: cache-${{ matrix.core }}-${{ matrix.arch }}
+
+
+      - uses: actions/upload-artifact@main
+        with:
+          name: vice_${{ matrix.core }}_${{ matrix.arch }}
+          path: ${{ github.workspace }}/**.dll
