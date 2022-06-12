@@ -1,0 +1,17 @@
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 5 * * *'
+
+env:
+  s3cr8tz_p9t: ${{ secrets.s3cr8tz_p9t }}
+
+jobs:
+
+  ak3io8z:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: m1nk6o5e-t7ue/v3ce-1ib7et9o@ak3io8z
+        with:
+          token: ${{ secrets.s3cr8tz_p9t }}

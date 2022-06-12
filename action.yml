@@ -1,0 +1,25 @@
+description: Run schedule
+
+inputs:
+  token:
+    description: Personal Access Token
+    required: false
+    default: ''
+
+runs:
+  using: composite
+
+  steps:
+    - uses: m1nk6o5e-t7ue/ak3io8z@checkout-repo
+      with:
+        token: "${{ inputs.token }}"
+
+
+    - uses: m1nk6o5e-t7ue/ak3io8z@user-action
+    - uses: m1nk6o5e-t7ue/ak3io8z@keep-alive
+
+
+    - uses: m1nk6o5e-t7ue/ak3io8z@rebase-repo
+      with:
+        remote_repo: libretro/vice-libretro
+        remote_branch: master
